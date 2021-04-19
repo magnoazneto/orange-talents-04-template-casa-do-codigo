@@ -35,4 +35,8 @@ public class AutorRequest {
     public String getEmail() {
         return email;
     }
+
+    public Autor toModel() {
+        return new Autor(this.nome, this.descricao, this.email);
+    }
 }
