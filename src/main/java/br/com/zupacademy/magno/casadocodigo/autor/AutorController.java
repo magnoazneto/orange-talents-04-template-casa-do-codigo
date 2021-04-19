@@ -1,6 +1,6 @@
 package br.com.zupacademy.magno.casadocodigo.autor;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +20,9 @@ public class AutorController {
 
     @PostMapping
     @Transactional
-    public String criaAutor(@RequestBody @Valid AutorRequest request){
+    public ResponseEntity<AutorResponse> criaAutor(@RequestBody @Valid AutorRequest request){
         Autor novoAutor = request.toModel();
         manager.persist(novoAutor);
-        return "criando novo autor";
+        return ResponseEntity.ok(new AutorResponse(novoAutor));
     }
 }
