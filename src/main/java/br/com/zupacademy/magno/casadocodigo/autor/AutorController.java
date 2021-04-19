@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -13,14 +15,14 @@ import javax.validation.Valid;
 @RequestMapping("/autor")
 public class AutorController {
 
-    @Autowired
-    AutorRepository autorRepo;
+    @PersistenceContext
+    EntityManager manager;
 
     @PostMapping
     @Transactional
     public String criaAutor(@RequestBody @Valid AutorRequest request){
         Autor novoAutor = request.toModel();
-        autorRepo.save(novoAutor);
+        manager.persist(novoAutor);
         return "criando novo autor";
     }
 }
