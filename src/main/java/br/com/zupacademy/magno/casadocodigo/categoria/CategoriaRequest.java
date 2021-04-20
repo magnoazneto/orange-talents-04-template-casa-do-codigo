@@ -1,13 +1,13 @@
 package br.com.zupacademy.magno.casadocodigo.categoria;
 
-import br.com.zupacademy.magno.casadocodigo.utils.validations.Unique;
+import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
 
 import javax.validation.constraints.NotBlank;
 
 public class CategoriaRequest {
 
     @NotBlank
-    @Unique(fieldName = "nome", targetClass = Categoria.class, message = "Já existe uma Categoria cadastrada com esse nome")
+    @Exists(fieldName = "nome", targetClass = Categoria.class, shouldExist = false, message = "Já existe uma Categoria cadastrada com esse nome")
     private String nome;
 
     @Deprecated

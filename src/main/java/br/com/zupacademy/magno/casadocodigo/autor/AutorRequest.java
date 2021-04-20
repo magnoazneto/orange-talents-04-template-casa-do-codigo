@@ -1,6 +1,6 @@
 package br.com.zupacademy.magno.casadocodigo.autor;
 
-import br.com.zupacademy.magno.casadocodigo.utils.validations.Unique;
+import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -17,7 +17,7 @@ public class AutorRequest {
 
     @NotBlank
     @Email
-    @Unique(fieldName = "email", targetClass = Autor.class, message = "Email já pertence a um Autor cadastrado")
+    @Exists(fieldName = "email", targetClass = Autor.class, shouldExist = false, message = "Email já pertence a um Autor cadastrado")
     private String email;
 
     public AutorRequest(String nome, String descricao, String email) {
