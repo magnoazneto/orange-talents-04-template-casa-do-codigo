@@ -7,9 +7,9 @@ import java.lang.annotation.*;
 
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ExistsValidator.class)
+@Constraint(validatedBy = ExistsValueValidator.class)
 @Documented
-public @interface Exists {
+public @interface ExistsValue {
     String message() default "{unique.value.violation}";
     // aplicar validacao apenas para grupos especificos
     Class<?>[] groups() default {};

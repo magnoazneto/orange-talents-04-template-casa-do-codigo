@@ -2,7 +2,6 @@ package br.com.zupacademy.magno.casadocodigo.livro;
 
 import br.com.zupacademy.magno.casadocodigo.autor.Autor;
 import br.com.zupacademy.magno.casadocodigo.categoria.Categoria;
-import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 

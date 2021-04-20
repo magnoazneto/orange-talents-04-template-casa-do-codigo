@@ -7,8 +7,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-// CI total: 3 pts
-public class ExistsValidator implements ConstraintValidator<Exists, Object> {
+// CI total: 1 pt
+public class ExistsValueValidator implements ConstraintValidator<ExistsValue, Object> {
 
     private String targetAttribute;
     private Class<?> klass;
@@ -23,10 +23,9 @@ public class ExistsValidator implements ConstraintValidator<Exists, Object> {
      * @param params o objeto que do tipo da anotacao que contem os campos especificados na annotation
      */
     @Override
-    public void initialize(Exists params) { // alteracao do nome do argumento para algo que faz mais sentido
+    public void initialize(ExistsValue params) { // alteracao do nome do argumento para algo que faz mais sentido
         targetAttribute = params.fieldName();
         klass = params.targetClass();
-        shoudExist = params.shouldExist();
     }
 
     /**
@@ -36,18 +35,15 @@ public class ExistsValidator implements ConstraintValidator<Exists, Object> {
      * @return True se a regra de valicacao der ok, False em caso contrario
      */
 
-    @Override // CI: 3
+    @Override // CI: 1
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
         // 1
         Query query = manager.createQuery("select 1 from "+klass.getName()+ " where "+ targetAttribute+"=:pValue");
         query.setParameter("pValue", value);
         List<?> list = query.getResultList();
 
-        if(shoudExist){ // 1 -- verifica caso onde o valor deve existir no banco
-            return !list.isEmpty();
-        }else {         // 1 -- verifica caso onde o valor deve ser unico, e nao deve existir no banco ate entao
-            return list.isEmpty();
-        }
+        return !list.isEmpty();
+
 
     }
 }

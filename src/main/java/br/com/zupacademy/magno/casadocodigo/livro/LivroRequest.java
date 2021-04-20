@@ -2,7 +2,8 @@ package br.com.zupacademy.magno.casadocodigo.livro;
 
 import br.com.zupacademy.magno.casadocodigo.autor.Autor;
 import br.com.zupacademy.magno.casadocodigo.categoria.Categoria;
-import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
+import br.com.zupacademy.magno.casadocodigo.utils.validations.ExistsValue;
+import br.com.zupacademy.magno.casadocodigo.utils.validations.UniqueValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.util.Assert;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 public class LivroRequest {
 
     @NotBlank
-    @Exists(fieldName = "titulo", targetClass = Livro.class, shouldExist = false, message = "titulo deve ser único")
+    @UniqueValue(fieldName = "titulo", targetClass = Livro.class, message = "titulo deve ser único")
     private String titulo;
 
     @NotBlank @Length(max = 500)
@@ -40,11 +41,11 @@ public class LivroRequest {
     private LocalDate dataPublicacao;
 
     @NotNull
-    @Exists(fieldName = "id", targetClass = Categoria.class, message = "Categoria deve existir")
+    @ExistsValue(fieldName = "id", targetClass = Categoria.class, message = "Categoria deve existir")
     private Long categoriaId;
 
     @NotNull
-    @Exists(fieldName = "id", targetClass = Autor.class, message = "Autor deve existir")
+    @ExistsValue(fieldName = "id", targetClass = Autor.class, message = "Autor deve existir")
     private Long autorId;
 
     public LivroRequest(String titulo,
