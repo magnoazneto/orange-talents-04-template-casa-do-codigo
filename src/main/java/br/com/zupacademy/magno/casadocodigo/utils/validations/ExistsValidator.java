@@ -1,17 +1,13 @@
 package br.com.zupacademy.magno.casadocodigo.utils.validations;
 
-import com.sun.xml.bind.v2.schemagen.episode.Klass;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
-import java.util.Optional;
 
+// CI total: 3 pts
 public class ExistsValidator implements ConstraintValidator<Exists, Object> {
 
     private String targetAttribute;
@@ -19,7 +15,6 @@ public class ExistsValidator implements ConstraintValidator<Exists, Object> {
     private boolean shoudExist;
 
     @PersistenceContext
-    @Autowired
     private EntityManager manager;
 
     /**
@@ -41,12 +36,18 @@ public class ExistsValidator implements ConstraintValidator<Exists, Object> {
      * @return True se a regra de valicacao der ok, False em caso contrario
      */
 
-    @Override
+    @Override // CI: 3
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
+        // 1
         Query query = manager.createQuery("select 1 from "+klass.getName()+ " where "+ targetAttribute+"=:pValue");
         query.setParameter("pValue", value);
         List<?> list = query.getResultList();
 
-        return shoudExist != list.isEmpty();
+        if(shoudExist){ // 1
+            return !list.isEmpty();
+        }else {         // 1
+            return list.isEmpty();
+        }
+
     }
 }

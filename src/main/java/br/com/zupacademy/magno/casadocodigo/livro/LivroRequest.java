@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+// CI total: 2 pts
 public class LivroRequest {
 
     @NotBlank
@@ -66,9 +67,10 @@ public class LivroRequest {
         this.autorId = autorId;
     }
 
+    // CI: 2
     public Livro toModel(EntityManager manager){
-        Categoria categoria = manager.find(Categoria.class, categoriaId);
-        Autor autor = manager.find(Autor.class, autorId);
+        Categoria categoria = manager.find(Categoria.class, categoriaId); // 1
+        Autor autor = manager.find(Autor.class, autorId); // 1
 
         Assert.state(autor!=null, "Autor(a) não encontrado(a) para o id " + autorId);
         Assert.state(categoria!=null, "Categoria não encontrado para o id " + categoriaId);

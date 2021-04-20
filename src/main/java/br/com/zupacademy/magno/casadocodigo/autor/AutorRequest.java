@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+// CI total: 1 ponto
 public class AutorRequest {
 
     @NotBlank
@@ -38,6 +39,7 @@ public class AutorRequest {
         return email;
     }
 
+    // 1
     public Autor toModel() {
         return new Autor(this.nome, this.descricao, this.email);
     }
