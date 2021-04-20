@@ -43,9 +43,9 @@ public class ExistsValidator implements ConstraintValidator<Exists, Object> {
         query.setParameter("pValue", value);
         List<?> list = query.getResultList();
 
-        if(shoudExist){ // 1
+        if(shoudExist){ // 1 -- verifica caso onde o valor deve existir no banco
             return !list.isEmpty();
-        }else {         // 1
+        }else {         // 1 -- verifica caso onde o valor deve ser unico, e nao deve existir no banco ate entao
             return list.isEmpty();
         }
 

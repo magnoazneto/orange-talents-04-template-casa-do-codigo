@@ -1,9 +1,10 @@
 package br.com.zupacademy.magno.casadocodigo.livro;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,11 +13,19 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/livro")
-//
 public class LivroController {
 
     @PersistenceContext
     EntityManager manager;
+
+    @Autowired
+    LivroRepository livroRepo;
+
+    @GetMapping
+    public Page<LivroResponse> listaLivros(Pageable paginacao) {
+        Page<Livro> livros = livroRepo.findAll(paginacao);
+        return LivroResponse.converter(livros);
+    }
 
     @PostMapping
     @Transactional
