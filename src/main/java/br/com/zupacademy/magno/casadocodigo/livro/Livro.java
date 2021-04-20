@@ -105,11 +105,11 @@ public class Livro {
         return dataPublicacao;
     }
 
-    public Categoria getCategoriaId() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public Autor getAutorId() {
+    public Autor getAutor() {
         return autor;
     }
 }

@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/livro")
@@ -20,6 +21,16 @@ public class LivroController {
 
     @Autowired
     LivroRepository livroRepo;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroDetalheResponse> detalhaLivro(@PathVariable Long id){
+        Optional<Livro> possivelLivro = livroRepo.findById(id);
+
+        return possivelLivro.map(livro -> {
+            return ResponseEntity.ok(new LivroDetalheResponse(livro));
+        }).orElseGet(() ->  ResponseEntity.notFound().build());
+
+    }
 
     @GetMapping
     public Page<LivroResponse> listaLivros(Pageable paginacao) {
