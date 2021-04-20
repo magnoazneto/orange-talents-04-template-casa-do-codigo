@@ -1,13 +1,12 @@
 package br.com.zupacademy.magno.casadocodigo.livro;
 
+import br.com.zupacademy.magno.casadocodigo.autor.Autor;
+import br.com.zupacademy.magno.casadocodigo.categoria.Categoria;
 import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -35,17 +34,19 @@ public class Livro {
     @NotNull @Min(100)
     private Integer numPaginas;
 
-    @NotBlank @Exists(fieldName = "isbn", targetClass = Livro.class)
+    @NotBlank
     private String isbn;
 
     @Future @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate dataPublicacao;
 
     @NotNull
-    private Integer categoriaId;
+    @ManyToOne
+    private Categoria categoria;
 
     @NotNull
-    private Integer autorId;
+    @ManyToOne
+    private Autor autor;
 
     @Deprecated
     public Livro(){
@@ -59,8 +60,8 @@ public class Livro {
                  Integer numPaginas,
                  String isbn,
                  LocalDate dataPublicacao,
-                 Integer categoriaId,
-                 Integer autorId) {
+                 Categoria categoria,
+                 Autor autor) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
@@ -68,8 +69,8 @@ public class Livro {
         this.numPaginas = numPaginas;
         this.isbn = isbn;
         this.dataPublicacao = dataPublicacao;
-        this.categoriaId = categoriaId;
-        this.autorId = autorId;
+        this.categoria = categoria;
+        this.autor = autor;
     }
 
     public Long getId() {
@@ -104,11 +105,11 @@ public class Livro {
         return dataPublicacao;
     }
 
-    public Integer getCategoriaId() {
-        return categoriaId;
+    public Categoria getCategoriaId() {
+        return categoria;
     }
 
-    public Integer getAutorId() {
-        return autorId;
+    public Autor getAutorId() {
+        return autor;
     }
 }

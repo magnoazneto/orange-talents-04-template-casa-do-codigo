@@ -1,8 +1,11 @@
 package br.com.zupacademy.magno.casadocodigo.livro;
 
+import br.com.zupacademy.magno.casadocodigo.autor.Autor;
+import br.com.zupacademy.magno.casadocodigo.categoria.Categoria;
 import br.com.zupacademy.magno.casadocodigo.utils.validations.Exists;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Future;
@@ -15,7 +18,7 @@ import java.time.LocalDate;
 public class LivroRequest {
 
     @NotBlank
-    @Exists(fieldName = "titulo", targetClass = Livro.class)
+    @Exists(fieldName = "titulo", targetClass = Livro.class, shouldExist = false, message = "titulo deve ser único")
     private String titulo;
 
     @NotBlank @Length(max = 500)
@@ -30,17 +33,18 @@ public class LivroRequest {
     private Integer numPaginas;
 
     @NotBlank
-    @Exists(fieldName = "isbn", targetClass = Livro.class)
     private String isbn;
 
     @Future @JsonFormat(pattern = "yyyy-MM-d", shape = JsonFormat.Shape.STRING)
     private LocalDate dataPublicacao;
 
     @NotNull
-    private Integer categoriaId;
+    @Exists(fieldName = "id", targetClass = Categoria.class, message = "Categoria deve existir")
+    private Long categoriaId;
 
     @NotNull
-    private Integer autorId;
+    @Exists(fieldName = "id", targetClass = Autor.class, message = "Autor deve existir")
+    private Long autorId;
 
     public LivroRequest(String titulo,
                         String resumo,
@@ -49,8 +53,8 @@ public class LivroRequest {
                         Integer numPaginas,
                         String isbn,
                         LocalDate dataPublicacao,
-                        Integer categoriaId,
-                        Integer autorId) {
+                        Long categoriaId,
+                        Long autorId) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
@@ -63,6 +67,11 @@ public class LivroRequest {
     }
 
     public Livro toModel(EntityManager manager){
+        Categoria categoria = manager.find(Categoria.class, categoriaId);
+        Autor autor = manager.find(Autor.class, autorId);
+
+        Assert.state(autor!=null, "Autor(a) não encontrado(a) para o id " + autorId);
+        Assert.state(categoria!=null, "Categoria não encontrado para o id " + categoriaId);
 
         return new Livro(this.titulo,
                 this.resumo,
@@ -71,8 +80,8 @@ public class LivroRequest {
                 this.numPaginas,
                 this.isbn,
                 this.dataPublicacao,
-                this.categoriaId,
-                this.autorId
+                categoria,
+                autor
                 );
     }
 
@@ -104,11 +113,11 @@ public class LivroRequest {
         return dataPublicacao;
     }
 
-    public Integer getCategoriaId() {
+    public Long getCategoriaId() {
         return categoriaId;
     }
 
-    public Integer getAutorId() {
+    public Long getAutorId() {
         return autorId;
     }
 
