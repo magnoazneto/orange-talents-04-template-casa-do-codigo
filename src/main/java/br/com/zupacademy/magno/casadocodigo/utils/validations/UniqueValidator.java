@@ -1,7 +1,6 @@
 package br.com.zupacademy.magno.casadocodigo.utils.validations;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,14 +18,14 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
     private EntityManager manager;
 
     /**
-     * Na inicializacao o metodo recebe a anotacao customizada e seta
-     * os valores definidos nela
-     * @param unique o objeto que do tipo da anotacao que vai conter o field e a classe alvo
+     * Esse método é chamado na instanciacao da classe que vai ser validada.
+     * O metodo recebe a anotacao customizada e seta os valores definidos nela
+     * @param params o objeto que do tipo da anotacao que contem os campos especificaso na annotation
      */
     @Override
-    public void initialize(Unique unique) {
-        targetAttribute = unique.fieldName();
-        klass = unique.targetClass();
+    public void initialize(Unique params) { // alteracao do nome do argumento para algo que faz mais sentido
+        targetAttribute = params.fieldName();
+        klass = params.targetClass();
     }
 
     /**
@@ -40,8 +39,10 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
         Query query = manager.createQuery("select k from "+klass.getName()+ " k where "+ targetAttribute+"=:pValue");
         query.setParameter("pValue", value);
-
         List<?> list = query.getResultList();
-        return list.size() == 0;
+        // programacao defensiva
+        Assert.state(list.size() <=1, "Foi encontrado mais de um "+klass+" com o atributo "+targetAttribute+" = "+value);
+
+        return list.isEmpty();
     }
 }
