@@ -1,4 +1,4 @@
-package br.com.zupacademy.magno.casadocodigo.config.errors;
+package br.com.zupacademy.magno.casadocodigo.utils.errors;
 
 public class ErrorDetails {
 

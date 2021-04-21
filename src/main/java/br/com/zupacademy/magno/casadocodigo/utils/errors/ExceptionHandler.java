@@ -1,4 +1,4 @@
-package br.com.zupacademy.magno.casadocodigo.config.errors;
+package br.com.zupacademy.magno.casadocodigo.utils.errors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
