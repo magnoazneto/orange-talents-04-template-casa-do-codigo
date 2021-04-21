@@ -37,4 +37,13 @@ public class Estado {
     public Pais getPais() {
         return pais;
     }
+
+    @Override
+    public String toString() {
+        return "Estado{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", pais=" + pais +
+                '}';
+    }
 }
